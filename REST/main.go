@@ -25,6 +25,7 @@ func main() {
 	{
 		v2.POST("/", storeComment)
 		v2.POST("/getComments/:id", getComments)
+		v2.POST("/deleteComment/:id", deleteComment)
 	}
 
 	router.Run(":8888")

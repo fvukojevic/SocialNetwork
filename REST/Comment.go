@@ -54,7 +54,7 @@ func getComments(c *gin.Context) {
 		return
 	}
 
-	query := "SELECT * FROM comments LEFT JOIN users ON users.id = comments.user_id WHERE post_id =? ORDER BY comments.created_at ASC"
+	query := "SELECT * FROM comments LEFT JOIN users ON users.id = comments.user_id WHERE post_id =? AND comments.deleted_at IS NULL ORDER BY comments.created_at ASC"
 
 	if err := db.Debug().Raw(query, id).Scan(&comments).Error; err != nil {
 		log.Println(err)
@@ -63,4 +63,22 @@ func getComments(c *gin.Context) {
 
 	log.Println(comments)
 	c.JSON(200, comments)
+}
+
+func deleteComment(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	var comment Comment
+	if err := db.Debug().Where("id = ?", id).Delete(&comment).Error; err != nil {
+		log.Println(err)
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message":"Comment deleted succesfully"})
 }
