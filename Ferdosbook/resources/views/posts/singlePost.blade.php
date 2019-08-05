@@ -34,7 +34,15 @@
                                                href="{{url('/posts/singlePost')}}/{{$post->ID}}">{{date('F j, Y', strtotime($post->CreatedAt))}}
                                                 at {{date('H: i', strtotime($post->CreatedAt))}}</a>
                                         </small>
-                                        <p>{{$post->content}}</p>
+                                        <br><span>{{$post->content}}</span><br>
+                                        @if(Auth::user()->id == $post->user_id)
+                                            <form id="my_form.{{ $post->ID }}" action="{{url('/post/delete')}}/{{$post->ID}}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a href="{{url('/post/edit')}}/{{$post->ID}}">Edit</a> |
+                                                <a href="javascript:{}" onclick="document.getElementById('my_form.{{ $post->ID }}').submit(); return false;">Delete</a>
+                                            </form>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -71,16 +79,23 @@
                             <div class="row">
                                 <div class="col-md-1">
                                     <img src="{{url('/')}}/public/img/{{$comment->picture}}"
-                                         width="60px" height="60px"/>
+                                         width="70px" height="70px"/>
                                 </div>
-                                <div class="col-md-10 offset-1">
+                                <div class="col-md-8 offset-1">
                                     <h5 style="margin:0px;"><a href="{{url('/profile')}}/{{$comment->slug}}">
                                             {{ucwords($comment->name)}}</a></h5>
                                     <small><i class="fas fa-globe" style="color:#3490dc;"></i>
                                         {{date('F j, Y', strtotime($comment->CreatedAt))}}
                                         at {{date('H: i', strtotime($comment->CreatedAt))}}
                                     </small>
-                                    <p>{{$comment->content}}</p>
+                                    <br><span>{{$comment->content}}</span></br>
+                                    @if(Auth::user()->id == $comment->user_id)
+                                        <form id="my_form.{{ $comment->ID }}" action="{{url('/comment/delete')}}/{{$comment->ID}}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('DELETE')
+                                            <a href="javascript:{}" onclick="document.getElementById('my_form.{{ $comment->ID }}').submit(); return false;">Delete</a>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>

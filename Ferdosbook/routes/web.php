@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function(){
 
     //for comments
     Route::post('/comments/addComment', 'CommentsController@store')->name('postComment');
+    Route::delete('/comment/delete/{if}', 'CommentsController@delete')->name('deleteComment');
 
     //for messages
     Route::get('/messages','MessagesController@index');

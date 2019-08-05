@@ -10,7 +10,7 @@ use Auth;
 class CommentsController extends Controller
 {
     /**
-     * Stores as post inside the database
+     * Stores as comment inside the database
      *
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
@@ -34,6 +34,19 @@ class CommentsController extends Controller
             return back()->with('success', 'Comment created successfully');
         }
         return back()->with('error', 'Oooops something went wrong');
+    }
+
+    /**
+     * Deleting the comment from the database
+     *
+     * @param $id
+     */
+    public function delete($id)
+    {
+        $client = $this->getClient();
+        $client->post('http://localhost:8888/comment/deleteComment/' . $id);
+
+        return back()->with('success', 'Comment deleted successfully');
     }
 
     /**
