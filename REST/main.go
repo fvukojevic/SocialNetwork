@@ -20,5 +20,12 @@ func main() {
 		v1.POST("/getPost", getPost)
 		v1.POST("/getMyPosts/:id", getMyPosts)
 	}
+
+	v2 := router.Group("/comment")
+	{
+		v2.POST("/", storeComment)
+		v2.POST("/getComments/:id", getComments)
+	}
+
 	router.Run(":8888")
 }

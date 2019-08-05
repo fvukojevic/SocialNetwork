@@ -37,11 +37,19 @@ class PostsController extends Controller
         $arr = [];
         $arr['id'] = (int)$id;
         $client = $this->getClient();
-        $res = $client->post('http://localhost:8888/post/getPost', ['body' => json_encode($arr)]);
+        $postRes = $client->post('http://localhost:8888/post/getPost', ['body' => json_encode($arr)]);
 
-        $post = json_decode($res->getBody()->getContents());
+        $post = json_decode($postRes->getBody()->getContents());
         $postCollection = collect($post);
-        return view('posts.singlePost')->with('post',$postCollection[0]);
+
+        $commentRes =  $client->post('http://localhost:8888/comment/getComments/' . $id);
+
+        $comment = json_decode($commentRes->getBody()->getContents());
+        $commentCollection = collect($comment);
+
+        return view('posts.singlePost')
+            ->with('post',$postCollection[0])
+            ->with('comments', $commentCollection);
     }
 
     /**
@@ -59,7 +67,7 @@ class PostsController extends Controller
 
       $post = new Posts;
       $post->user_id = Auth::user()->id;
-      $post->content = $request->content;
+      $post->content = $request['content'];
       $post->status = 1;
 
       $client = $this->getClient();
@@ -102,7 +110,7 @@ class PostsController extends Controller
         $post = new Posts;
         $post->id = (int)$id;
         $post->user_id = Auth::user()->id;
-        $post->content = $request->content;
+        $post->content = $request['content'];
         $post->status = 1;
 
         $client = $this->getClient();

@@ -49,12 +49,13 @@
                             </div>
                             <div class="col-md-11">
 
-                                <form style="width:auto;" action="{{ route('postStatus') }}" method="POST"
+                                <form style="width:auto;" action="{{ route('postComment') }}" method="POST"
                                       enctype="multipart/form-data">
                                     @csrf
                                     <textarea id="postText" style="width:100%!important; resize:none;" class="form-control"
                                               name="content" rows="2" cols="80"
                                               placeholder="Comment here..." name="content"></textarea>
+                                    <input type="hidden" name="post_id" value="{{ $post->ID }}"/>
                                     <input type="submit" value="Comment"
                                            class="btn btn-sm btn-primary"
                                            style="position:absolute;color:#3490dc;bottom:0px;right:16px;background-color:Transparent!important"
@@ -64,6 +65,26 @@
                             </div>
                         </div>
                     </div>
+                    @foreach($comments as $comment)
+                        <div class="card-footer">
+
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <img src="{{url('/')}}/public/img/{{$comment->picture}}"
+                                         width="60px" height="60px"/>
+                                </div>
+                                <div class="col-md-10 offset-1">
+                                    <h5 style="margin:0px;"><a href="{{url('/profile')}}/{{$comment->slug}}">
+                                            {{ucwords($comment->name)}}</a></h5>
+                                    <small><i class="fas fa-globe" style="color:#3490dc;"></i>
+                                        {{date('F j, Y', strtotime($comment->CreatedAt))}}
+                                        at {{date('H: i', strtotime($comment->CreatedAt))}}
+                                    </small>
+                                    <p>{{$comment->content}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
