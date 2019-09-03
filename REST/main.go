@@ -28,5 +28,10 @@ func main() {
 		v2.POST("/deleteComment/:id", deleteComment)
 	}
 
+	v3 := router.Group("/message")
+	{
+		v3.POST("/sendMessage", sendMessage)
+	}
+
 	router.Run(":8888")
 }

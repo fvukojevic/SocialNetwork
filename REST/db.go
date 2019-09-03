@@ -16,4 +16,5 @@ func connectToDatabase() {
 	}
 
 	db.AutoMigrate(&Post{})
+	db.AutoMigrate(&Comment{})
 }
